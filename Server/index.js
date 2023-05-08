@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
+const authRoute = require("./routes").auth;
 
 // connect to DB
 
@@ -18,10 +19,11 @@ mongoose
     console.log(e);
   });
 
-// midlleware
+// midllewares
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api/user", authRoute);
 
 //
 
