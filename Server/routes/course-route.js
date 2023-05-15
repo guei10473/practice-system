@@ -7,10 +7,12 @@ router.use((req, res, next) => {
   next();
 });
 
-router.post("/course", async (req, res) => {
+router.post("/", async (req, res) => {
   // validate the inputs before making a new course
   const { error } = courseValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
 
   let { title, description, price } = req.body;
   if (req.user.isStudent()) {
@@ -30,3 +32,5 @@ router.post("/course", async (req, res) => {
     res.status(400).send("Cannot save course.");
   }
 });
+
+module.exports = router;

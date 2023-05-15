@@ -1,3 +1,5 @@
+const { Error } = require("mongoose");
+
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("../models").userModel;
@@ -8,16 +10,30 @@ module.exports = (passport) => {
   opts.secretOrKey = process.env.PASSPORT_SECRET;
   passport.use(
     new JwtStrategy(opts, function (jwt_payload, done) {
-      User.findOne({ _id: jwt_payload.id }, (err, user) => {
-        if (err) {
-          return done(err, false);
-        }
-        if (user) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
+      User.findOne({ _id: jwt_payload._id })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            return done(null, false);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            return done(err, false);
+          }
+        });
+
+      // User.findOne({ _id: jwt_payload.id }, function (err, user) {
+      //   if (err) {
+      //     return done(err, false);
+      //   }
+      //   if (user) {
+      //     return done(null, user);
+      //   } else {
+      //     return done(null, false);
+      //   }
+      // });
     })
   );
 };

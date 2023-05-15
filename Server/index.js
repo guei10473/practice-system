@@ -27,7 +27,11 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", authRoute);
-app.use("/api", passport.authenticate("jwt", { session: false }), courseRoute);
+app.use(
+  "/api/courses",
+  passport.authenticate("jwt", { session: false }),
+  courseRoute
+);
 
 //
 

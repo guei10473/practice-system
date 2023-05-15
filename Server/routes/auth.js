@@ -9,7 +9,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/testAPI", (req, res) => {
+router.get("API/test", (req, res) => {
   const msgObj = {
     message: "Test API is working",
   };
@@ -20,9 +20,8 @@ router.post("/register", async (req, res) => {
   // check the validation of data
   const { error } = registerValidation(req.body);
   if (error) {
+    console.log(error);
     return res.status(400).send(error.details[0].message);
-    //   } else {
-    //     return res.send("Registered.");
   }
 
   // check if the user exists
@@ -65,7 +64,7 @@ router.post("/login", async (req, res) => {
         if (isMatch) {
           const tokenObject = { _id: user._id, email: user.email };
           const token = jwt.sign(tokenObject, process.env.PASSPORT_SECRET);
-          res.send({ success: true, token: "JWT" + token, user });
+          res.send({ success: true, token: "JWT " + token, user });
         } else {
           res.status(401).send("Wrong password.");
         }
