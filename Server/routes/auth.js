@@ -9,7 +9,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("API/test", (req, res) => {
+router.get("/testapi", (req, res) => {
   const msgObj = {
     message: "Test API is working",
   };

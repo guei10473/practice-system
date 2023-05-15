@@ -31,12 +31,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.method.isStudent = function () {
+userSchema.methods.isStudent = function () {
   return this.role == "student";
 };
 
-userSchema.method.isIntructor = function () {
+userSchema.methods.isIntructor = function () {
   return this.role == "intructor";
+};
+
+userSchema.methods.isAdmin = function () {
+  return this.role == "admin";
 };
 
 // mongoose schema middleware
