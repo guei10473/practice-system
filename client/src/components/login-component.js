@@ -1,17 +1,34 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import AuthService from "../services/auth.service";
 
-const LoginComponent = () => {
-  const history = useHistory();
+const LoginComponent = (props) => {
+  let { currentUser, setCurrentUser } = props;
+  const navigate = useNavigate();
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [message, setMessage] = useState("");
+
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
   };
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+  };
+  const handleLogin = () => {
+    AuthService.login(email, password)
+      .then((response) => {
+        if (response.data.token) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+        window.alert("Login successfully.");
+        setCurrentUser(AuthService.getCurrentUser());
+        navigate("/profile");
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setMessage(error.response.data);
+      });
   };
 
   return (
@@ -43,7 +60,7 @@ const LoginComponent = () => {
         </div>
         <br />
         <div className="form-group">
-          <button className="btn btn-primary btn-block">
+          <button onClick={handleLogin} className="btn btn-primary btn-block">
             <span>Login</span>
           </button>
         </div>
